@@ -3,4 +3,5 @@ jdk:
 before_install:
   - chmod +x gradlew
 install:
-  - ./gradlew :openai-client:publishAllPublicationsToMavenLocal -Pgroup=com.github.wceng
+  # 使用更通用的发布命令，并移除特定子项目前缀
+  - ./gradlew publishToMavenLocal -Pgroup=com.github.wceng
