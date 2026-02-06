@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.multiplaform) apply false
     alias(libs.plugins.kotlinx.serialization) apply false
@@ -17,12 +16,19 @@ plugins {
 }
 
 subprojects {
+    apply(plugin = "maven-publish")
     apply(plugin = "com.diffplug.spotless")
     configure<SpotlessExtension> {
         kotlin {
             target("**/*.kt")
             trimTrailingWhitespace()
             endWithNewline()
+        }
+    }
+
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
+            withSourcesJar() // 关键：这会让生成器制作 xxx-sources.jar
         }
     }
 
